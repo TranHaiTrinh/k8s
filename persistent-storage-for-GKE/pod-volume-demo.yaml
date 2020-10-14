@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pvc-demo-pod
+spec:
+  volumes:
+      - name: pvc-demo-volume
+        persistentVolumeClaim:
+              claimName: hello-web-disk
+
+  containers:
+  - name: frontend
+    image: nginx
+    volumeMounts:
+        - mountPath: "/usr/share/nginx/html/"
+          name: pvc-demo-volume

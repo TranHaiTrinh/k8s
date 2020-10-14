@@ -5,14 +5,12 @@ metadata:
   labels:
     app: nginxapp
 spec:
-  nodeSelector:
-      kubernetes.io/hostname: gke-cluster-01-default-pool-00301a50-9r2q
   containers:
   - name: n1
     image: nginx:1.17.6
     resources:
       limits:
-        memory: "256Mi"
+        memory: "128Mi"
         cpu: "100m"
     ports:
       - containerPort: 80

@@ -1,0 +1,22 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-nginx
+spec:
+  # Chú ý đúng với Label của POD tại Deployment
+  selector:
+    app: nginx
+  type: NodePort
+  ports:
+  - port: 80        # cổng dịch vụ ánh xạ vào cổng POD
+    targetPort: 80    # cổng POD ánh xạ vào container
+    protocol: TCP
+    name: http
+    nodePort: 30080   # cổng NODE ánh xạ vào cổng dịch vụ (chỉ chọn 30000-32767)
+
+  - port: 443
+    targetPort: 443
+    protocol: TCP
+    name: https
+    nodePort: 30443

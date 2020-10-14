@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: ReplicaSet
+kind: Deployment
 metadata:
   name: rsapp
 spec:
@@ -9,12 +9,17 @@ spec:
       app: rsapp
   template:
     metadata:
-      name: rsapp-metadata
+      name: rsapp
       labels:
         app: rsapp
     spec:
+      volumes:
+          - name: dsf
+            persistentVolumeClaim:
+                  claimName: hello-web-disk
+                  
       containers:
-      - name: app-node
+      - name: app
         image: ichte/swarmtest:node
         resources:
           limits:

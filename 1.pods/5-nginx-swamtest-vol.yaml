@@ -6,12 +6,12 @@ metadata:
     app: myapp
 spec:
   nodeSelector:
-      kubernetes.io/hostname: gke-cluster-01-default-pool-00301a50-30dm
+    kubernetes.io/hostname: gke-cluster-01-default-pool-00301a50-9r2q
   volumes:
-      - name: myvol
-        hostPath:
-              path: "/home/html"
-
+    # Định nghĩa một volume - ánh xạ thư mục /home/html máy host
+    - name: "myvol"
+      hostPath:
+          path: "/home/html"
   containers:
   - name: n1
     image: nginx:1.17.6
@@ -22,19 +22,16 @@ spec:
     ports:
       - containerPort: 80
     volumeMounts:
-        - mountPath: "/usr/share/nginx/html"
-          name: myvol
-
+      - mountPath: /usr/share/nginx/html
+        name: "myvol"
   - name: s1
     image: ichte/swarmtest:node
     resources:
-      limits:
-        memory: "150Mi"
-        cpu: "100m"
+     limits:
+       memory: "150Mi"
+       cpu: "100m"
     ports:
       - containerPort: 8085
     volumeMounts:
-        - mountPath: "/data/"
-          name: myvol
-
-  
+      - mountPath: /data/
+        name: "myvol"

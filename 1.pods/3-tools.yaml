@@ -5,12 +5,10 @@ metadata:
   labels:
     app: tools
 spec:
-#  nodeSelector:
-#      kubernetes.io/hostname: gke-cluster-01-default-pool-00301a50-30dm
   containers:
   - name: tools
     image: ichte/coretools
     resources: {}
     command: ["/bin/bash"]
-    args: ["-c", "while true; do echo 'coretools running'; sleep 10;done"]
+    args: ["-c", "while true; do echo 'busybox running'; sleep 10;done"]
     

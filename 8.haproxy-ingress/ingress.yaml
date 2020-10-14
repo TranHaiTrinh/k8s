@@ -1,0 +1,72 @@
+# kubectl create ns ingress-controller
+# kubectl apply -f https://haproxy-ingress.github.io/resources/haproxy-ingress.yaml
+
+# kubectl label node name-worker1 role=ingress-controller
+# kubectl label node name-worker2 role=ingress-controller
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: http-test-svc
+  name: http-test-svc
+  # Deploy này tạo tại namespace có Haproxy Ingress
+  namespace: ingress-controller
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      run: http-test-app
+  template:
+    metadata:
+      labels:
+        run: http-test-app
+    spec:
+      containers:
+      - image: nginx
+        imagePullPolicy: IfNotPresent
+        name: http
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        resources: {}
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: http-test-svc
+  # dịch vụ này tạo tại namespace có Haproxy Ingress
+  namespace: ingress-controller
+spec:
+  type: NodePort
+  selector:
+    run: http-test-app
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    nodePort: 30100
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: hello-ingress
+  namespace: ingress-controller
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.global-static-ip-name: "global-ingress"
+
+spec:
+  rules:
+  - host: haitrinhabcd.tk
+    http: 
+      paths:
+      - path: /
+        backend:
+          serviceName: http-test-svc
+          servicePort: 80
