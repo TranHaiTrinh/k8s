@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: rsapp
+  labels:
+    app: rsapp
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: gke-cluster-01-default-pool-00301a50-9r2q
+  containers:
+  - name: app-nod
+    image: nginx:1.17.6
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "100m"
+    ports:
+      - containerPort: 8081
+
+status:
+  hostIP: 10.240.0.79
+
